@@ -23,7 +23,7 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 const initialState = {
   user: null,
   token: localStorage.getItem('token'),
-  isAuthenticated: false,
+  isAuthenticated: !!localStorage.getItem('token'), // Cập nhật logic này
   loading: false,
   error: null,
 };
@@ -61,4 +61,4 @@ const authSlice = createSlice({
 });
 
 export const { clearError } = authSlice.actions;
-export default authSlice.reducer; 
+export default authSlice.reducer;

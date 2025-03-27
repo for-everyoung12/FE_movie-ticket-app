@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Button,
@@ -18,45 +18,50 @@ import {
   TableRow,
   IconButton,
   Alert,
-  MenuItem,
   CircularProgress,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Add as AddIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
-} from '@mui/icons-material';
+} from "@mui/icons-material";
 import {
   fetchShowtimes,
   addShowtime,
   updateShowtime,
   deleteShowtime,
   clearError,
-} from '../store/slices/showtimeSlice';
+} from "../store/slices/showtimeSlice";
 
 function ShowtimeManagement() {
   const dispatch = useDispatch();
-  const { showtimes = [], loading, error } = useSelector((state) => state.showtime);
+  const {
+    showtimes = [],
+    loading,
+    error,
+  } = useSelector((state) => state.showtime);
   const [open, setOpen] = useState(false);
   const [editingShowtime, setEditingShowtime] = useState(null);
   const [formData, setFormData] = useState({
-    movie_id: '',
-    room_id: '',
-    showtime: '',
-    available_seats: '',
-    price: '',
+    movie_id: "",
+    room_id: "",
+    showtime: "",
+    available_seats: "",
+    price: "",
   });
 
   useEffect(() => {
     dispatch(fetchShowtimes());
   }, [dispatch]);
 
+  console.log(showtimes); // Thêm log để kiểm tra dữ liệu showtimes
+
   const handleOpen = (showtime = null) => {
     if (showtime) {
       setEditingShowtime(showtime);
       setFormData({
         movie_id: showtime.movie_id._id,
-        room_id: showtime.room_id?._id || '',
+        room_id: showtime.room_id?._id || "",
         showtime: showtime.showtime.slice(0, 16), // Format for datetime-local input
         available_seats: showtime.available_seats,
         price: showtime.price,
@@ -64,11 +69,11 @@ function ShowtimeManagement() {
     } else {
       setEditingShowtime(null);
       setFormData({
-        movie_id: '',
-        room_id: '',
-        showtime: '',
-        available_seats: '',
-        price: '',
+        movie_id: "",
+        room_id: "",
+        showtime: "",
+        available_seats: "",
+        price: "",
       });
     }
     setOpen(true);
@@ -78,11 +83,11 @@ function ShowtimeManagement() {
     setOpen(false);
     setEditingShowtime(null);
     setFormData({
-      movie_id: '',
-      room_id: '',
-      showtime: '',
-      available_seats: '',
-      price: '',
+      movie_id: "",
+      room_id: "",
+      showtime: "",
+      available_seats: "",
+      price: "",
     });
   };
 
@@ -96,7 +101,9 @@ function ShowtimeManagement() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (editingShowtime) {
-      await dispatch(updateShowtime({ id: editingShowtime._id, showtimeData: formData }));
+      await dispatch(
+        updateShowtime({ id: editingShowtime._id, showtimeData: formData })
+      );
     } else {
       await dispatch(addShowtime(formData));
     }
@@ -104,14 +111,21 @@ function ShowtimeManagement() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this showtime?')) {
+    if (window.confirm("Are you sure you want to delete this showtime?")) {
       await dispatch(deleteShowtime(id));
     }
   };
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "400px",
+        }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -119,7 +133,7 @@ function ShowtimeManagement() {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
         <Typography variant="h4">Showtime Management</Typography>
         <Button
           variant="contained"
@@ -131,7 +145,11 @@ function ShowtimeManagement() {
       </Box>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }} onClose={() => dispatch(clearError())}>
+        <Alert
+          severity="error"
+          sx={{ mb: 2 }}
+          onClose={() => dispatch(clearError())}
+        >
           {error}
         </Alert>
       )}
@@ -151,8 +169,10 @@ function ShowtimeManagement() {
             {Array.isArray(showtimes) && showtimes.length > 0 ? (
               showtimes.map((showtime) => (
                 <TableRow key={showtime._id}>
-                  <TableCell>{showtime.movie_id?.title || 'N/A'}</TableCell>
-                  <TableCell>{new Date(showtime.showtime).toLocaleString()}</TableCell>
+                  <TableCell>{showtime.movie_id?.title || "N/A"}</TableCell>
+                  <TableCell>
+                    {new Date(showtime.showtime).toLocaleString()}
+                  </TableCell>
                   <TableCell>{showtime.available_seats}</TableCell>
                   <TableCell>${showtime.price}</TableCell>
                   <TableCell>
@@ -178,7 +198,7 @@ function ShowtimeManagement() {
 
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle>
-          {editingShowtime ? 'Edit Showtime' : 'Add New Showtime'}
+          {editingShowtime ? "Edit Showtime" : "Add New Showtime"}
         </DialogTitle>
         <DialogContent>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
@@ -235,7 +255,7 @@ function ShowtimeManagement() {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleSubmit} variant="contained">
-            {editingShowtime ? 'Update' : 'Add'}
+            {editingShowtime ? "Update" : "Add"}
           </Button>
         </DialogActions>
       </Dialog>
@@ -243,4 +263,4 @@ function ShowtimeManagement() {
   );
 }
 
-export default ShowtimeManagement; 
+export default ShowtimeManagement;

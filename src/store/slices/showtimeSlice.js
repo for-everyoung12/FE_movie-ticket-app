@@ -74,7 +74,7 @@ const showtimeSlice = createSlice({
       })
       .addCase(fetchShowtimes.fulfilled, (state, action) => {
         state.loading = false;
-        state.showtimes = action.payload;
+        state.showtimes = action.payload.showtimes; // Sửa lại để lấy dữ liệu từ key "showtimes"
       })
       .addCase(fetchShowtimes.rejected, (state, action) => {
         state.loading = false;
@@ -99,4 +99,4 @@ const showtimeSlice = createSlice({
 });
 
 export const { clearError } = showtimeSlice.actions;
-export default showtimeSlice.reducer; 
+export default showtimeSlice.reducer;
